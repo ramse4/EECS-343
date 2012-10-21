@@ -1,0 +1,51 @@
+.\" Process this file with
+.\" groff -man -Tascii tsh.1
+.\"
+.TH TSH 1 "OCTOBER 2012" "NU EECS 343" "NU EECS 343 - Operating Systems - Fall 2012"
+.SH NAME
+tsh \- A tiny shell
+.SH SYNOPSIS
+.B tsh
+.SH DESCRIPTION
+.B 
+This is a basic implementation of a shell. It is able to run processes in the
+foreground, including 3 built-in commands (cd, pwd, exit). 
+
+External commands can be run as well. To do this the shell determines the
+commands location and modifies it to create its absolute path. From here the
+program is run with the execv() function.
+
+.SH BUILT-IN COMMANDS
+.IP 
+.IP
+  cd [dir]
+     Changes the current directoy to dir.
+.IP
+  pwd
+     Prints current working directory to console.
+.IP
+  exit
+     Exit shell
+
+.SH DESIGN APPROACH
+In implementing the shell, I tried to keep to the given design as much as
+possible because I felt it represented a well thought out and modular structure. 
+However, this did lead to me needing possibly more (but also more readable)
+code. For instance, instead of concatenating each a command with the rest of
+its absolute path and executing it all in one function, I separated these
+tasks into multiple functions. In this case the difficulty was increased b/c I
+then had to separate the absolute path extensions and put them into an array
+for later use which lead to messy allocation issues. The only place that I did
+not adhere to the original design was with the built-in commands. Currently
+they executed in interpret(), however I will probably move these over to their
+intended functions over the weekend.
+
+Signal Handling: When a SIGINT signal is processed, the signal handler
+function sig() catches it and determines what action to take next. If the pid
+of the current running process is greater than 0, kill(-currentpid,SIGINT) is
+sent out to the child processes. 
+
+.SH AUTHOR
+Name: Max Goldman
+netid: mag403
+email: maxgoldman2013@u.northwestern.edu 
